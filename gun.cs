@@ -1,7 +1,9 @@
 using UnityEngine;
+using System.Collections;
 
 public class gun : MonoBehaviour
 {
+    //recoil
     public float rotationSpeed = 6;
     public float returnSpeed = 25;
 
@@ -9,14 +11,39 @@ public class gun : MonoBehaviour
 
     private Vector3 currentRotation;
     private Vector3 Rot;
+    //recoil
 
-    public float damage = 10f;
-    public float range = 70f;
+    //ammo
+    public int maxAmmo = 10;
+    private int currentAmmo;
+    public float reloadTime = 1f;
+    private bool isReloading = false;
+    //ammo
+
+    public float damage = 10f;//gun damage
+    public float range = 70f;// gun range
+
+    AudioSource m_shootingsound;//gun sound
+    float timeLastShot = 0f;
+    float delayBetweenShots = 0.37f;
+
+    public Animator animator;
+    AudioSource m_shootingsound;//reload sound
 
 
     public Camera fpsCam;
-    public ParticleSystem muzzleFlash;
-    public GameObject impactEffect;
+    public ParticleSystem muzzleFlash;//muzzle flash
+    public GameObject impactEffect;//give damage
+    
+    void Start()
+    {
+        currentAmmo = maxAmmo;
+    }
+    void OnEnable()
+    {
+        isReloading = false;
+        animator.SetBool("Reloading", false);
+    }
 
     void FixedUpdate()
     {
@@ -32,18 +59,44 @@ public class gun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (isReloading)
         {
+            return;
+        }
+        if (Input.GetMouseButtonDown(0) && (Time.time > timeLastShot + delayBetweenShots))
+        {
+            timeLastShot = Time.time;
             Shoot();
             Fire();
         }
+        if (currentAmmo <= 0)
+        {
+            StartCoroutine(Reload());
+            return;
+        }
     }
 
+    IEnumerator Reload()
+    {
+        isReloading = true;
+
+        animator.SetBool("Reloading", true);
+
+        yield return new WaitForSeconds(reloadTime - .25f);
+        animator.SetBool("Reloading", false);
+        yield return new WaitForSeconds(.25f);
+
+        currentAmmo = maxAmmo;
+
+        isReloading = false;
+    }
 
     void Shoot()
     {
+        m_shootingsound = GetComponent<AudioSource>();
+        currentAmmo--;
         muzzleFlash.Play();
-        
+        m_shootingsound.Play();
 
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
