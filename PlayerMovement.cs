@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
@@ -34,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         if (Input.GetKey(KeyCode.LeftShift))
         {
+            Stamina.instance.UseStamina(1);
             currentSpeed = speed * 2;
         }
         else
@@ -43,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(move * currentSpeed * Time.deltaTime);
         if (Input.GetButtonDown("Jump") && isGrounded)//jump
         {
+            
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         //gravity
