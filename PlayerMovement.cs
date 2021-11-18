@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 velocity;
     bool isGrounded;
+    
+
 
     // Update is called once per frame
     void Update()
@@ -33,8 +35,9 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * x + transform.forward * z;
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && Stamina.instance.currentStamina > 0)
         {
+            
             Stamina.instance.UseStamina(1);
             currentSpeed = speed * 2;
         }
