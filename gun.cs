@@ -85,7 +85,7 @@ public class gun : MonoBehaviour
             Fire();
             isFiring = false;
         }
-        if (currentAmmo <= 0 || Input.GetKeyDown(KeyCode.R))
+        if (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo))
         {
             timeLastShot = Time.time;
             StartCoroutine(Reload());

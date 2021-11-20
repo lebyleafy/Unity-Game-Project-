@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
+    public AudioClip DieSound;
     public float health = 50f;
+
 
     public void TakeDamage (float amount)
     {
@@ -15,6 +17,8 @@ public class Target : MonoBehaviour
     }
     void Die()
     {
+        AudioSource.PlayClipAtPoint(DieSound, transform.position); 
         Destroy(gameObject);
+        
     }
 }

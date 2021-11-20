@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100;
     public int currentHealth;
 
     public Health healthBar;
 
-    private WaitForSeconds regenTick = new WaitForSeconds(.1f);
+
+    private WaitForSeconds regenTick = new WaitForSeconds(.2f);
     private Coroutine regen;
 
     // Start is called before the first frame update
@@ -32,7 +34,11 @@ public class Player : MonoBehaviour
 
             regen = StartCoroutine(RegenHealth());
         }
-        
+        if (currentHealth == 0)
+        {
+            KillPlayer();
+        }
+
     }
 
     void OnTriggerEnter(Collider col)
@@ -46,7 +52,7 @@ public class Player : MonoBehaviour
     }
     private IEnumerator RegenHealth()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         while (currentHealth < maxHealth)
         {
@@ -55,5 +61,9 @@ public class Player : MonoBehaviour
             yield return regenTick;
         }
         regen = null;
+    }
+    public void KillPlayer()
+    {
+        SceneManager.LoadScene("Level 1");
     }
 }
