@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public GameoverScreen GameOverScreen;
+
+
     public int maxHealth = 100;
     public int currentHealth;
 
@@ -36,7 +40,7 @@ public class PlayerHealth : MonoBehaviour
         }
         if (currentHealth == 0)
         {
-            KillPlayer();
+            GameOver();
         }
 
     }
@@ -62,8 +66,9 @@ public class PlayerHealth : MonoBehaviour
         }
         regen = null;
     }
-    public void KillPlayer()
+    public void GameOver()
     {
-        SceneManager.LoadScene("Level 1");
+        GameOverScreen.Setup();
+        Cursor.lockState = CursorLockMode.None;
     }
 }

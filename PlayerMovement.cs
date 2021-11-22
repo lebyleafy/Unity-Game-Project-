@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameoverScreen GameOverScreen;
     public CharacterController controller;
 
     public float speed = 12f;
@@ -51,9 +52,18 @@ public class PlayerMovement : MonoBehaviour
             
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Menu();
+        }
         //gravity
         velocity.y += gravity * Time.deltaTime;
         //moving
         controller.Move(velocity * Time.deltaTime);
+    }
+    public void Menu()
+    {
+        GameOverScreen.Setup();
+        Cursor.lockState = CursorLockMode.None;
     }
 }
